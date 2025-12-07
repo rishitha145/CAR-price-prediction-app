@@ -70,27 +70,42 @@ plt.xlabel("Actual Price")
 plt.ylabel("Predicted Price")
 plt.title(" Actual Prices vs Predicted Prices")
 plt.show()
-
-import pickle
-
-with open("model.pkl", "wb") as f:
-    pickle.dump(lin_reg_model, f)
-
 import streamlit as st
 import pickle
 import numpy as np
 
-st.title("Car price prediction app")
+st.title("Car Price Prediction App")
 
 # Load model
 with open("model.pkl", "rb") as f:
     model = pickle.load(f)
 
-# User input
-feature1 = st.number_input('Car_Name')
-feature2 = st.number_input('Selling_Price')
+st.header("Enter Car Details")
+
+# Inputs required by trained model
+year = st.number_input("Year", min_value=1990, max_value=2025, step=1)
+present_price = st.number_input("Present Price (Lakhs)")
+kms_driven = st.number_input("Kms Driven")
+fuel_type = st.selectbox("Fuel Type", ["Petrol", "Diesel", "CNG"])
+seller_type = st.selectbox("Seller Type", ["Dealer", "Individual"])
+transmission = st.selectbox("Transmission", ["Manual", "Automatic"])
+owner = st.number_input("Previous Owners", min_value=0, max_value=3)
+
+# Encoding (same as training)
+fuel_map = {"Petrol": 0, "Diesel": 1, "CNG": 2}
+seller_map = {"Dealer": 0, "Individual": 1}
+trans_map = {"Manual": 0, "Automatic": 1}
 
 if st.button("Predict"):
-    input_data = np.array([['Car_Name', 'Selling_Price']])
+    input_data = np.array([[ 
+        year,
+        present_price,
+        kms_driven,
+        fuel_map[fuel_type],
+        seller_map[seller_type],
+        trans_map[transmission],
+        owner
+    ]])
+
     prediction = model.predict(input_data)
-    st.success(f"Prediction: {prediction[0]}")
+    st.success(f"Predicted Selling Price: ₹ {prediction[0]:.2f} Lakhs")
