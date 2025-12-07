@@ -8,8 +8,6 @@ Original file is located at
 """
 
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
@@ -54,22 +52,12 @@ training_data_prediction = lin_reg_model.predict(X_train)
 error_score = metrics.r2_score(Y_train, training_data_prediction)
 print("R squared Error : ", error_score)
 
-plt.scatter(Y_train, training_data_prediction)
-plt.xlabel("Actual Price")
-plt.ylabel("Predicted Price")
-plt.title(" Actual Prices vs Predicted Prices")
-plt.show()
 
 test_data_prediction = lin_reg_model.predict(X_test)
 
 error_score = metrics.r2_score(Y_test, test_data_prediction)
 print("R squared Error : ", error_score)
 
-plt.scatter(Y_test, test_data_prediction)
-plt.xlabel("Actual Price")
-plt.ylabel("Predicted Price")
-plt.title(" Actual Prices vs Predicted Prices")
-plt.show()
 import streamlit as st
 import pickle
 import numpy as np
